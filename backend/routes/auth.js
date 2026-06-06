@@ -2,7 +2,7 @@ import express from "express";
 import pool from "../config/db.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { protuct } from "../middleware/auth.js";
+import { protect } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -89,21 +89,24 @@ router.post("/login", async (req, res) => {
     user: {
       id: userData.id,
       username: userData.username,
-      email: userData.email
+      email: userData.email,
     },
   });
 });
 
 //Me
-router.get('/me', protuct, async (req, res) => {
+router.get("/me", protect, async (req, res) => {
   res.json(req.user);
-})
+});
 
 //Logout
-router.post('/logout', async (req, res) => {
-  res.cookie('token', "", {...cookieOption, maxAge: 1},
-  res.json({msg: 'User logged out succesfully'})
-  )
+router.post("/logout", async (req, res) => {
+  res.cookie("token", "", {
+    ...cookieOption,
+    maxAge: 1,
+  });
+
+  res.json({ msg: "User logged out successfully" });
 });
 
 export default router;

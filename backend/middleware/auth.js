@@ -1,9 +1,9 @@
 import pool from "../config/db.js";
 import jwt from "jsonwebtoken";
 
-export const protuct = async (req, res, next) => {
+export const protect = async (req, res, next) => {
 try{
-  const token = req.cookie.token;
+  const token = req.cookies.token;
 
   if (!token) {
     return res.status(401).send({ msg: "Invalid token" });
@@ -22,7 +22,7 @@ try{
       .send({ msg: "Invalid credientials, User Not Found" });
   }
 
-  req.body = res.user.rows[0];
+  req.user = user.rows[0];
   next();
 }catch(err){
     console.error(err);
